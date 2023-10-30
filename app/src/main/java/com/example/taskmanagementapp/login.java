@@ -1,3 +1,4 @@
+/*
 package com.example.taskmanagementapp;
 
 import androidx.annotation.NonNull;
@@ -113,6 +114,160 @@ public class login extends AppCompatActivity {
         super.onStart();
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            finish();
+        }
+    }
+}*/
+
+
+package com.example.taskmanagementapp;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+public class login extends AppCompatActivity {
+    EditText email, password;
+    Button loginBtn, gotoRegister;
+    boolean valid = true;
+    FirebaseAuth fAuth;
+    DatabaseReference usersRef;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        fAuth = FirebaseAuth.getInstance();
+        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        email = findViewById(R.id.loginEmail);
+        password = findViewById(R.id.loginPassword);
+        loginBtn = findViewById(R.id.loginBtn);
+        gotoRegister = findViewById(R.id.gotoRegister);
+
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkField(email);
+                checkField(password);
+
+                if (valid) {
+                    fAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                            .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                @Override
+                                public void onSuccess(AuthResult authResult) {
+                                    Toast.makeText(login.this, "Login Successfully", Toast.LENGTH_SHORT).show();
+                                    redirectBasedOnRole(email.getText().toString());
+                                    String user_email = email.getText().toString();
+
+                                    if (user_email.equals("kuber@email.com") || user_email.equals("harshil@gmail.com") || user_email.equals("jay@gmail.com")){
+                                        startActivity(new Intent(login.this, admin.class));
+                                        finish();
+                                    }else{
+                                        startActivity(new Intent(login.this, MainActivity.class));
+                                        finish();
+                                    }
+
+                                    /*boolean isAdmin = isAdminUser(email.getText().toString());
+                                    if(isAdmin){
+
+                                    }else{
+
+                                    }*/
+                                   // checkUserAccessLevel(authResult.getUser().getUid());
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(login.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+            }
+        });
+
+        gotoRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), register.class));
+            }
+        });
+    }
+
+    private void checkUserAccessLevel(String uid) {
+        DatabaseReference currentUserRef = usersRef.child(uid);
+        currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    boolean isAdmin = dataSnapshot.child("isAdmin").getValue(Boolean.class);
+                    if (isAdmin) {
+                        startActivity(new Intent(login.this, admin.class));
+                        finish();
+                    } else {
+                        startActivity(new Intent(login.this, MainActivity.class));
+                        finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("TAG", "DatabaseError: " + databaseError.getMessage());
+            }
+        });
+    }
+
+    public boolean checkField(EditText textField) {
+        if (textField.getText().toString().isEmpty()) {
+            textField.setError("Error");
+            valid = false;
+        } else {
+            valid = true;
+        }
+
+        return valid;
+    }
+
+    private boolean isAdminUser(String userEmail) {
+        return userEmail.equals("kuber@email.com") || userEmail.equals("harshil@gmail.com") || userEmail.equals("jay@gmail.com");
+    }
+
+    private void redirectBasedOnRole(String userEmail) {
+        if (isAdminUser(userEmail)) {
+            startActivity(new Intent(login.this, admin.class));
+            finish();
+        } else {
+            startActivity(new Intent(login.this, MainActivity.class));
+            finish();
+        }
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            startActivity(new Intent(login.this, MainActivity.class));
             finish();
         }
     }

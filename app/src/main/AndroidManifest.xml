@@ -14,10 +14,7 @@
         android:theme="@style/Theme.TaskManagementApp"
         tools:targetApi="31">
         <activity
-            android:name=".admin"
-            android:exported="false" />
-        <activity
-            android:name=".login"
+            android:name=".SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,8 +23,38 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".register"
+            android:name=".EditTaskAdmin"
             android:exported="false" />
+        <activity
+            android:name=".AdminTaskDetail"
+            android:exported="false" />
+        <activity
+            android:name=".TaskDetails"
+            android:exported="false" />
+        <activity
+            android:name=".EditUserTasks"
+            android:exported="false" />
+        <activity
+            android:name=".CreateTaskUser"
+            android:exported="false" />
+        <activity
+            android:name=".CreateTaskAdmin"
+            android:exported="false" />
+        <activity
+            android:name=".admin"
+            android:exported="false" />
+        <activity
+            android:name=".login"
+            android:exported="false" />
+        <activity
+            android:name=".register"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="false" />

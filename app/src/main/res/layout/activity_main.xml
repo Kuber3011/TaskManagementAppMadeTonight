@@ -1,32 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/DarkGray"
     android:orientation="vertical"
-    android:padding="16dp">
+    >
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:title="User Dashboard"
+        android:titleTextColor="@android:color/white"
+        android:background="?attr/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:textSize="18sp"
+            android:layout_gravity="right"/>
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <LinearLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:padding="16dp">
+
+
+
+        <Button
+            android:id="@+id/btnAddTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Task"
+            android:textColor="@android:color/white"/>
+
+
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tasks:"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        />
 
     <ListView
         android:id="@+id/listViewUser"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        />
+
+
 
     <Button
-        android:id="@+id/btnAddTask"
+        android:id="@+id/btnDeleteUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Task"
+        android:text="Delete User"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:textColor="@android:color/white"/>
+
     <Button
-        android:id="@+id/btnLogout"
+        android:id="@+id/btnAdminHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logout"
+        android:text="Admin Home "
         android:layout_gravity="center"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginTop="16dp"
+        android:textColor="@android:color/white"/>
+
+
+
 </LinearLayout>
